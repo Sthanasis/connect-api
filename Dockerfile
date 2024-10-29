@@ -13,5 +13,5 @@ RUN dotnet publish -c Release -o out
 FROM mcr.microsoft.com/dotnet/aspnet:8.0
 WORKDIR /App
 COPY --from=build-env /App/out .
-EXPOSE 8080
+EXPOSE 5063
 ENTRYPOINT ["dotnet", "connect.dll"]
