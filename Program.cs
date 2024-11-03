@@ -6,7 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddSwaggerGen();
-builder.Services.AddCors(options => 
+builder.Services.AddCors(options =>
 {
     options.AddPolicy("CORSPolicy", builder =>
     {
@@ -19,7 +19,7 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.Configure<ProductDatabaseSettings>(
-    builder.Configuration.GetSection("ShopDatabase"));
+    builder.Configuration.GetSection("AppDatabase"));
 
 builder.Services.AddSingleton<ProductService>();
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);

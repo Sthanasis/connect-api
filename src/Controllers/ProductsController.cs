@@ -1,7 +1,7 @@
 using connect.Models;
 using connect.Services;
+using connect.Utilities;
 using Microsoft.AspNetCore.Mvc;
-
 namespace connect.Controllers;
 
 [ApiController]
@@ -9,25 +9,46 @@ namespace connect.Controllers;
 public class ProductsController : ControllerBase
 {
     private readonly ProductService _productService;
-
+    private readonly AppErrorUtility _appErrorUtils = new();
     public ProductsController(ProductService productService) =>
         _productService = productService;
 
     [HttpGet]
-    public async Task<List<Product>> Get() =>
-        await _productService.GetAsync();
+    public async Task<ActionResult<AppResult<List<Product>>>> Get()
+    {
+        try
+        {
+            List<Product> products = await _productService.GetAllAsync();
+            AppResult<List<Product>> result = new() { Data = products };
+            return Ok(result);
+        }
+        catch (Exception ex)
+        {
+            return _appErrorUtils.SendServerError(ex.Message);
+        }
+    }
 
     [HttpGet("{id:length(24)}")]
-    public async Task<ActionResult<Product>> Get(string id)
+    public async Task<ActionResult<AppResult<Product>>> Get(string id)
     {
-        var product = await _productService.GetAsync(id);
-
-        if (product is null)
+        try
         {
-            return NotFound();
-        }
+            var product = await _productService.GetAsync(id);
 
-        return product;
+            if (product is null)
+            {
+                return _appErrorUtils.SendClientError("Not Found");
+            }
+
+            return Ok(new AppResult<Product>()
+            {
+                Data = product
+            });
+        }
+        catch (Exception ex)
+        {
+            return _appErrorUtils.SendServerError(ex.Message);
+        }
     }
 
     [HttpPost]
@@ -45,7 +66,7 @@ public class ProductsController : ControllerBase
 
         if (product is null)
         {
-            return NotFound();
+            return _appErrorUtils.SendClientError("not found");
         }
 
         updatedProduct.Id = product.Id;
@@ -62,7 +83,7 @@ public class ProductsController : ControllerBase
 
         if (book is null)
         {
-            return NotFound();
+            return _appErrorUtils.SendClientError("not found");
         }
 
         await _productService.RemoveAsync(id);
