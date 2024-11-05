@@ -9,7 +9,7 @@ public class AppErrorUtility : ControllerBase
     {
         return StatusCode(500, new AppResult()
         {
-            Error = new ErrorViewModel { Message = message },
+            Error = new ErrorViewModel { Message = message, Status = 500 },
         });
     }
 
@@ -17,7 +17,7 @@ public class AppErrorUtility : ControllerBase
     {
         return NotFound(new AppResult()
         {
-            Error = new ErrorViewModel { Message = message },
+            Error = new ErrorViewModel { Message = message, Status = 404 },
         });
     }
 }
