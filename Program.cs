@@ -18,7 +18,7 @@ builder.Services.AddCors(options =>
     });
 });
 
-builder.Services.Configure<ProductDatabaseSettings>(
+builder.Services.Configure<AppDatabaseSettings>(
     builder.Configuration.GetSection("AppDatabase"));
 
 builder.Services.AddSingleton<ProductService>();

@@ -9,18 +9,18 @@ public class ProductService
     private readonly IMongoCollection<Product> _productCollection;
 
     public ProductService(
-        IOptions<ProductDatabaseSettings> productDatabaseSettings)
+        IOptions<AppDatabaseSettings> appDatabaseSettings)
     {
-        var settings = MongoClientSettings.FromConnectionString(productDatabaseSettings.Value.ConnectionString);
+        var settings = MongoClientSettings.FromConnectionString(appDatabaseSettings.Value.ConnectionString);
         // Request timeout
         settings.ServerSelectionTimeout = TimeSpan.FromSeconds(10);
         var mongoClient = new MongoClient(settings);
 
         var mongoDatabase = mongoClient.GetDatabase(
-            productDatabaseSettings.Value.DatabaseName);
+            appDatabaseSettings.Value.DatabaseName);
 
         _productCollection = mongoDatabase.GetCollection<Product>(
-            productDatabaseSettings.Value.ProductCollectionName);
+            appDatabaseSettings.Value.ProductCollectionName);
     }
 
     public async Task<List<Product>> GetAllAsync() => await _productCollection.Find(_ => true).ToListAsync();

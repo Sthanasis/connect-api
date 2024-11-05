@@ -1,6 +1,6 @@
 namespace connect.Models;
 
-public class ProductDatabaseSettings
+public class AppDatabaseSettings
 {
     public string ConnectionString { get; set; } = null!;
 
