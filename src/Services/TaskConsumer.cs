@@ -1,14 +1,17 @@
+using System.Diagnostics;
 using System.Text;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-public class TaskConsumer : BackgroundService
+public sealed class TaskConsumer : BackgroundService
 {
+    private IConnection? connection;
+    private IModel? channel;
     public void StartListening()
     {
         var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
-        using var connection = factory.CreateConnection();
-        using var channel = connection.CreateModel();
+        connection = factory.CreateConnection();
+        channel = connection.CreateModel();
         channel.ExchangeDeclare(exchange: "product_reviewed", type: ExchangeType.Fanout);
         var queueName = channel.QueueDeclare().QueueName;
         channel.QueueBind(queue: queueName,
