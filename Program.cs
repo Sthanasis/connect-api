@@ -22,6 +22,8 @@ builder.Services.Configure<AppDatabaseSettings>(
     builder.Configuration.GetSection("AppDatabase"));
 
 builder.Services.AddSingleton<ProductService>();
+builder.Services.AddHostedService<TaskConsumer>();
+
 builder.Services.AddControllers().AddJsonOptions(options => options.JsonSerializerOptions.PropertyNamingPolicy = null);
 
 var app = builder.Build();
@@ -36,11 +38,8 @@ if (!app.Environment.IsDevelopment())
 
 app.UseDefaultFiles();
 app.UseStaticFiles();
-
 app.UseCors("CORSPolicy");
-
 app.MapControllerRoute(
     name: "default",
     pattern: "{controller=Home}/{action=Index}/{id?}");
-
 app.Run();

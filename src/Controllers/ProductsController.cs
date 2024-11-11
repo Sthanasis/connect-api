@@ -6,12 +6,10 @@ namespace connect.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
-public class ProductsController : ControllerBase
+public class ProductsController(ProductService productService) : ControllerBase
 {
-    private readonly ProductService _productService;
+    private readonly ProductService _productService = productService;
     private readonly AppErrorUtility _appErrorUtils = new();
-    public ProductsController(ProductService productService) =>
-        _productService = productService;
 
     [HttpGet]
     public async Task<ActionResult<AppResult<List<Product>>>> Get()
