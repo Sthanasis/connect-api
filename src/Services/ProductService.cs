@@ -36,4 +36,12 @@ public class ProductService
 
     public async Task RemoveAsync(string id) =>
         await _productCollection.DeleteOneAsync(x => x.Id == id);
+
+    public async Task UpdateProductRating(ReviewMessage review)
+    {
+        var product = await _productCollection.Find(x => x.Id == review.ProductId).FirstAsync();
+        product.ReviewsCount += 1;
+        product.Rating = (review.ReviewScore + product.Rating) / product.ReviewsCount;
+        await _productCollection.ReplaceOneAsync(x => x.Id == product.Id, product);
+    }
 }

@@ -24,6 +24,15 @@ public class Product
     public List<string> Images { get; set; } = [];
     [JsonPropertyName("rating")]
     public float Rating { get; set; } = 0;
+    [JsonPropertyName("ratingPercentage")]
+    public float RatingPercentage
+    {
+        get
+        {
+            return Rating * 100 / 5;
+        }
+        set { }
+    }
     [JsonPropertyName("reviewsCount")]
     public int ReviewsCount { get; set; } = 0;
 }

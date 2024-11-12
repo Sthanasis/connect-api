@@ -1,12 +1,16 @@
 using System.Diagnostics;
 using System.Text;
+using System.Text.Json;
+using connect.Models;
+using connect.Services;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 
-public sealed class TaskConsumer : BackgroundService
+public sealed class TaskConsumer(ProductService productService) : BackgroundService
 {
     private IConnection? connection;
     private IModel? channel;
+    private readonly ProductService _productService = productService;
     public void StartListening()
     {
         var factory = new ConnectionFactory() { HostName = "localhost", DispatchConsumersAsync = true };
@@ -23,8 +27,9 @@ public sealed class TaskConsumer : BackgroundService
         {
             var body = ea.Body.ToArray();
             var message = Encoding.UTF8.GetString(body);
-            await Task.CompletedTask;
-            Console.WriteLine(" [x] Received {0}", message);
+            var review = JsonSerializer.Deserialize<ReviewMessage>(message);
+            if (review != null) await _productService.UpdateProductRating(review);
+            Console.WriteLine(" [x] Received {0}", review);
         };
         channel.BasicConsume(queue: queueName, autoAck: true, consumer: consumer);
         Console.WriteLine(" [x] Listenning for product_reviewed");
