@@ -3,6 +3,7 @@ using System.Text;
 using System.Text.Json;
 using connect.Models;
 using connect.Services;
+using connect_utilities.Models;
 using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 

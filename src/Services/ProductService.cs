@@ -1,4 +1,5 @@
 using connect.Models;
+using connect_utilities.Models;
 using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
