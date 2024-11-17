@@ -37,8 +37,19 @@ public sealed class TaskConsumer(ProductService productService) : BackgroundServ
 
     protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        StartListening();
-        await Task.CompletedTask;
+        try
+        {
+            StartListening();
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine(ex);
+        }
+        finally
+        {
+            await Task.CompletedTask;
+        }
+
     }
 
 }

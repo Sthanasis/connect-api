@@ -1,7 +1,8 @@
 using connect.Models;
 using connect.Services;
-using connect.Utilities;
 using Microsoft.AspNetCore.Mvc;
+using connect_utilities.Utilities;
+using connect_utilities.Models;
 namespace connect.Controllers;
 
 [ApiController]
