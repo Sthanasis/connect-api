@@ -22,10 +22,19 @@ public class Product
     public string Category { get; set; } = null!;
     [JsonPropertyName("images")]
     public List<string> Images { get; set; } = [];
+    public int TotalScore { get; set; } = 0;
+
     [JsonPropertyName("rating")]
-    public float Rating { get; set; } = 0;
+    public double Rating
+    {
+        get
+        {
+            return (double)TotalScore / ReviewsCount;
+        }
+        set { }
+    }
     [JsonPropertyName("ratingPercentage")]
-    public float RatingPercentage
+    public double RatingPercentage
     {
         get
         {

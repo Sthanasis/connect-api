@@ -42,7 +42,7 @@ public class ProductService
     {
         var product = await _productCollection.Find(x => x.Id == review.ProductId).FirstAsync();
         product.ReviewsCount += 1;
-        product.Rating = (review.ReviewScore + product.Rating) / product.ReviewsCount;
+        product.TotalScore += review.ReviewScore;
         await _productCollection.ReplaceOneAsync(x => x.Id == product.Id, product);
     }
 }
